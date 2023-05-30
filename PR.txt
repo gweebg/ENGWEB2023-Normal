@@ -1,0 +1,123 @@
+Guilherme Sampaio, a96766 - EngWeb2023-Normal - Respostas Escritas
+
+
+Modo de execução do exame:
+
+(Ativar API de dados)
+1º cd ex1
+2º npm install
+3º npm run start
+
+(Ativar interface)
+1º cd ex2
+2º npm install
+3º npm run start
+
+
+1.1) 
+Após análise do dataset, o primeiro passo antes de o importar para o MongoDB foi transformar todos os campos "id" em "_id", deste modo o Mongo consegue identificar diretamente a chave de identificação do nosso dataset.
+
+De seguida, podemos importar o dataset para o Mongo:
+
+in> mongoimport --db=plantas --collection=plantas --file=plantas.json
+
+Ou através do Mongo Compass clicar em "New Database" e em seguida "Add Data".
+
+Deste modo, o dataset fica pronto para ser utilizado.
+
+1.2) 
+
+----------------------------------------------------------------
+
+Query 1:
+
+in> use plantas
+in> db.plantas.count()
+
+out> 29617
+
+----------------------------------------------------------------
+
+Query 2:
+
+in> use plantas
+in> db.plantas.count( {Freguesia: "São Domingos de Rana"} )
+
+out> 5903
+
+----------------------------------------------------------------
+
+Query 3:
+
+in> use plantas
+in> db.plantas.distinct("Freguesia").sort()
+
+out> [
+  '',
+  'Abóboda',
+  'Alcabideche',
+  'São Domingos de Rana',
+  'U.F. Carcavelos e Parede',
+  'U.F. Cascais e Estoril'
+]
+
+----------------------------------------------------------------
+
+Query 4:
+
+in> use plantas
+in> db.plantas.aggregate([  {'$group': {'_id': '$Freguesia', 'count': {'$sum': 1}}}  ])
+
+out>
+{
+  _id: 'U.F. Carcavelos e Parede',
+  count: 7629
+}
+
+{
+  _id: 'Alcabideche',
+  count: 4034
+}
+
+{
+  _id: '',
+  count: 26
+}
+
+{
+  _id: 'Abóboda',
+  count: 2
+}
+
+{
+  _id: 'U.F. Cascais e Estoril',
+  count: 12023
+}
+
+{
+  _id: 'São Domingos de Rana',
+  count: 5903
+}
+
+----------------------------------------------------------------
+
+Query 5:
+
+in> use plantas
+in> db.plantas.aggregate([  {'$group': {'_id': '$Espécie', 'count': {'$sum': 1}}}  ])
+
+out> 
+{
+  _id: 'tuia',
+  count: 64
+}
+
+{
+  _id: 'prunus',
+  count: 57
+}
+
+(...)
+
+----------------------------------------------------------------
+
